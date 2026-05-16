@@ -1,0 +1,45 @@
+server:
+  port: 8090
+
+jwt:
+  secret: ${JWT_SECRET:eventmaster-shared-dev-secret-key-change-in-prod}
+
+services:
+  user-service:
+    url: http://localhost:8080
+  event-service:
+    url: http://localhost:8081
+  recommendation-service:
+    url: http://localhost:8082
+  feed-service:
+    url: http://localhost:8083
+
+spring:
+  cloud:
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOriginPatterns: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: true
+            maxAge: 3600
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway
+
+logging:
+  level:
+    root: INFO
+    com.eventmaster: DEBUG
+    org.springframework.cloud.gateway: DEBUG

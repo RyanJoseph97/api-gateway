@@ -1,0 +1,12 @@
+jwt:
+  secret: eventmaster-shared-dev-secret-key-change-in-prod
+
+services:
+  user-service:
+    url: http://localhost:8080
+  event-service:
+    url: http://localhost:8081
+  recommendation-service:
+    url: http://localhost:8082
+  feed-service:
+    url: http://localhost:8083

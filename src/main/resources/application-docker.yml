@@ -1,0 +1,18 @@
+jwt:
+  secret: ${JWT_SECRET}
+
+services:
+  user-service:
+    url: http://user-service:8080
+  event-service:
+    url: http://event-service:8081
+  recommendation-service:
+    url: http://recommendation-service:8082
+  feed-service:
+    url: http://feed-service:8083
+
+logging:
+  level:
+    root: INFO
+    com.eventmaster: INFO
+    org.springframework.cloud.gateway: INFO
