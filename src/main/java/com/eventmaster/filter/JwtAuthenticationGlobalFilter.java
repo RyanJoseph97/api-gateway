@@ -7,7 +7,7 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
-import org.springframework.core.annotation.Order;
+import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -19,8 +19,12 @@ import reactor.core.publisher.Mono;
 import java.nio.charset.StandardCharsets;
 
 @Component
-@Order(-1)
-public class JwtAuthenticationGlobalFilter implements GlobalFilter {
+public class JwtAuthenticationGlobalFilter implements GlobalFilter, Ordered {
+
+    @Override
+    public int getOrder() {
+        return -1;
+    }
 
     @Value("${jwt.secret}")
     private String jwtSecret;
