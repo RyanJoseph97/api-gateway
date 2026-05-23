@@ -69,9 +69,9 @@ public class JwtAuthenticationGlobalFilter implements GlobalFilter, Ordered {
         if (HttpMethod.POST.equals(method)) {
             return path.equals("/users") || path.equals("/users/login");
         }
-        // GET requests to event listings and details are publicly readable
+        // GET requests to event listings/details and user search are publicly readable
         if (HttpMethod.GET.equals(method)) {
-            return path.startsWith("/events");
+            return path.startsWith("/events") || path.equals("/users/search");
         }
         return false;
     }

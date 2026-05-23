@@ -26,12 +26,17 @@ public class GatewayRoutesConfig {
     @Bean
     public RouteLocator routeLocator(RouteLocatorBuilder builder) {
         return builder.routes()
-                // Saved-events lives in event-service even though the path starts with /users.
-                // This more-specific route must come before the generic /users/** route.
+                // These routes live in event-service despite the /users/ prefix.
+                // Both must come before the generic /users/** route.
                 .route("saved-events", r -> r
                         .path("/users/*/saved-events")
                         .and().method(HttpMethod.GET)
                         .filters(f -> f.rewritePath("/users/(?<username>[^/]+)/saved-events", "/event-service/users/${username}/saved-events"))
+                        .uri(eventServiceUrl))
+                .route("rsvped-events", r -> r
+                        .path("/users/*/rsvped-events")
+                        .and().method(HttpMethod.GET)
+                        .filters(f -> f.rewritePath("/users/(?<username>[^/]+)/rsvped-events", "/event-service/users/${username}/rsvped-events"))
                         .uri(eventServiceUrl))
                 // /users → user-service:8080/user-service/users
                 .route("user-service", r -> r
