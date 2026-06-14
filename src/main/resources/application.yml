@@ -38,6 +38,21 @@ management:
       exposure:
         include: health,info,gateway
 
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
+    urls:
+      - name: user-service
+        url: /v3/api-docs/user-service
+      - name: event-service
+        url: /v3/api-docs/event-service
+      - name: recommendation-service
+        url: /v3/api-docs/recommendation-service
+      - name: feed-service
+        url: /v3/api-docs/feed-service
+
 logging:
   level:
     root: INFO

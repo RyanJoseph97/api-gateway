@@ -58,6 +58,23 @@ public class GatewayRoutesConfig {
                         .path("/feed", "/feed/**")
                         .filters(f -> f.rewritePath("/feed(?<segment>/?.*)", "/feed-service/feed${segment}"))
                         .uri(feedServiceUrl))
+                // OpenAPI spec proxy routes — Swagger UI at the gateway fetches these
+                .route("docs-user-service", r -> r
+                        .path("/v3/api-docs/user-service")
+                        .filters(f -> f.rewritePath("/v3/api-docs/user-service", "/user-service/v3/api-docs"))
+                        .uri(userServiceUrl))
+                .route("docs-event-service", r -> r
+                        .path("/v3/api-docs/event-service")
+                        .filters(f -> f.rewritePath("/v3/api-docs/event-service", "/event-service/v3/api-docs"))
+                        .uri(eventServiceUrl))
+                .route("docs-recommendation-service", r -> r
+                        .path("/v3/api-docs/recommendation-service")
+                        .filters(f -> f.rewritePath("/v3/api-docs/recommendation-service", "/recommendation-service/v3/api-docs"))
+                        .uri(recommendationServiceUrl))
+                .route("docs-feed-service", r -> r
+                        .path("/v3/api-docs/feed-service")
+                        .filters(f -> f.rewritePath("/v3/api-docs/feed-service", "/feed-service/v3/api-docs"))
+                        .uri(feedServiceUrl))
                 .build();
     }
 }

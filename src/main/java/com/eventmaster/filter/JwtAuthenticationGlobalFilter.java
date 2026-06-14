@@ -65,9 +65,15 @@ public class JwtAuthenticationGlobalFilter implements GlobalFilter, Ordered {
     }
 
     private boolean isPublic(String path, HttpMethod method) {
+        // Swagger UI and OpenAPI specs are always public
+        if (path.startsWith("/swagger-ui") || path.startsWith("/v3/api-docs")
+                || path.startsWith("/webjars/swagger-ui")) {
+            return true;
+        }
         // User registration and login require no token
         if (HttpMethod.POST.equals(method)) {
-            return path.equals("/users") || path.equals("/users/login");
+            return path.equals("/users") || path.equals("/users/login")
+                    || path.equals("/users/token/refresh") || path.equals("/users/logout");
         }
         // GET requests to event listings/details and user search are publicly readable
         if (HttpMethod.GET.equals(method)) {
