@@ -15,12 +15,22 @@ services:
     url: http://localhost:8083
 
 spring:
+  application:
+    name: api-gateway
+  redis:
+    host: localhost
+    port: 6379
+  sleuth:
+    sampler:
+      probability: 1.0
+  zipkin:
+    enabled: false
   cloud:
     gateway:
       globalcors:
         corsConfigurations:
           '[/**]':
-            allowedOriginPatterns: "*"
+            allowedOriginPatterns: "${CORS_ALLOWED_ORIGINS:http://localhost:5173}"
             allowedMethods:
               - GET
               - POST

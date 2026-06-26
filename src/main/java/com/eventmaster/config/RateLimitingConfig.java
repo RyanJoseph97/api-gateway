@@ -1,23 +1,25 @@
 package com.eventmaster.config;
 
+import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
+import org.springframework.cloud.gateway.filter.ratelimit.RedisRateLimiter;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import reactor.core.publisher.Mono;
 
-/**
- * Placeholder for per-route rate limiting.
- *
- * Intended implementation: Redis-backed RequestRateLimiter using
- * spring-cloud-starter-gateway's built-in RedisRateLimiter. Requires adding
- * spring-boot-starter-data-redis-reactive and a Redis service to docker-compose.
- *
- * Example config when ready:
- *   .route("event-service", r -> r.path("/events/**")
- *       .filters(f -> f.requestRateLimiter(c -> {
- *           c.setRateLimiter(redisRateLimiter());
- *           c.setKeyResolver(userKeyResolver());
- *       }))
- *       .uri(eventServiceUrl))
- */
 @Configuration
 public class RateLimitingConfig {
-    // TODO: implement RedisRateLimiter once Redis is added to the stack
+
+    @Bean
+    public RedisRateLimiter redisRateLimiter() {
+        // replenishRate=10 tokens/sec, burstCapacity=20, requestedTokens=1 per request
+        return new RedisRateLimiter(10, 20, 1);
+    }
+
+    @Bean
+    public KeyResolver userKeyResolver() {
+        return exchange -> {
+            var address = exchange.getRequest().getRemoteAddress();
+            return Mono.just(address != null ? address.getAddress().getHostAddress() : "unknown");
+        };
+    }
 }

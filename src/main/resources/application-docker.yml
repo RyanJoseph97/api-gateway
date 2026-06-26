@@ -11,8 +11,38 @@ services:
   feed-service:
     url: http://feed-service:8083
 
+spring:
+  cloud:
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOriginPatterns: "${CORS_ALLOWED_ORIGINS:http://localhost:5173}"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: true
+            maxAge: 3600
+  redis:
+    host: redis
+    port: 6379
+    password: ${REDIS_PASSWORD}
+  zipkin:
+    enabled: true
+    base-url: ${SPRING_ZIPKIN_BASE_URL:http://zipkin:9411}
+  sleuth:
+    sampler:
+      probability: 1.0
+
 logging:
   level:
     root: INFO
     com.eventmaster: INFO
     org.springframework.cloud.gateway: INFO
+    org.springframework.cloud.gateway.filter.ratelimit: DEBUG
+    io.lettuce.core: DEBUG
