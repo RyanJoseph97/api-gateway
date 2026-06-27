@@ -1,5 +1,6 @@
 jwt:
-  secret: ${JWT_SECRET}
+  # Must be provided via environment (Secrets Manager in prod); fail fast if missing.
+  secret: ${JWT_SECRET:?JWT_SECRET must be set}
 
 services:
   user-service:
